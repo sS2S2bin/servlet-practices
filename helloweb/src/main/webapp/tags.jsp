@@ -34,17 +34,17 @@
 	
 	<br>
 	
-	<img src="http://localhost:8080/helloweb/images/loopy.jpg">
-	<img src="/helloweb/images/loopy.jpg">
-	<img src="images/loopy.jpg">
-	
+	<img src="http://localhost:8080/helloweb/images/racoon.jpeg">
+	<img src="/helloweb/images/racoon.jpeg">
+	<img src="images/racoon.jpeg">
+	<img src="./images/racoon.jpeg">
 	<p>
 		문장입니다.<br>
 		문장입니다.<br>
 		문장입니다.
 	</p>
 	
-	<a href="/helloweb/hello?id=kickscar">hello로 가기</a>
+	<a href="/helloweb/hello?id=pedro">hello로 가기</a>
 	<br>
 	<a href="/helloweb/form.jsp">form으로 가기</a>
 </body>

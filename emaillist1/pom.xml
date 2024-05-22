@@ -5,15 +5,17 @@
     <artifactId>servlet-practices</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>helloweb</artifactId>
-  <packaging>war</packaging>
+  <artifactId>emaillist1</artifactId>
   
   
+    
   <build>
-	<finalName>helloweb</finalName>
+	<finalName>emaillist1</finalName>
   </build>
   
-  <properties>
+  
+  <packaging>war</packaging>
+      <properties>
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<project.build.outputEncoding>UTF-8</project.build.outputEncoding>
 	<maven.compiler.source>17</maven.compiler.source>
@@ -27,4 +29,6 @@
 	    <version>3.2.0</version>
 	</dependency>
   </dependencies>
+  
+  
 </project>

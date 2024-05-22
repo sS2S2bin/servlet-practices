@@ -7,6 +7,7 @@
   <modules>
   	<module>helloweb</module>
   	<module>emaillist1</module>
+  	<module>guestbook1</module>
   </modules>
   
 

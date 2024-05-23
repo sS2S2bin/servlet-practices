@@ -12,17 +12,17 @@
 	String password = request.getParameter("password");
 	String contents = request.getParameter("message");
 	
-    // 현재 날짜 구하기
+   /*  // 현재 날짜 구하기
     LocalDate now = LocalDate.now();
 	// 포맷 정의
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	String reg_date = now.format(formatter);
-	
+	 */
 	GuestbookVo vo = new GuestbookVo();
 	vo.setName(name);
 	vo.setPassword(password);
 	vo.setContents(contents);
-	vo.setRegDate(reg_date);
+	/* vo.setRegDate(reg_date); */
 	
 	new GuestbookDao().insert(vo);
 	

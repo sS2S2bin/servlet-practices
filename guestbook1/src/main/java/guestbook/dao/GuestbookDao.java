@@ -45,24 +45,22 @@ public class GuestbookDao {
 	public void insert(GuestbookVo vo) {
 		try(
 				Connection conn = getConnection(); 
-				PreparedStatement pstmt1 = conn.prepareStatement("insert into guestbook(name, password,contents,reg_date) values(?,?,?,?)");  
+				PreparedStatement pstmt1 = conn.prepareStatement("insert into guestbook(name, password,contents,reg_date) values(?,?,?,now())");  
 				PreparedStatement pstmt2 = conn.prepareStatement("select last_insert_id() from guestbook");  
 					
 			){
 				pstmt1.setString(1, vo.getName());
 				pstmt1.setString(2, vo.getPassword());
 				pstmt1.setString(3, vo.getContents());
-				pstmt1.setString(4, vo.getRegDate());
 				pstmt1.executeUpdate();
 				
 				
 				ResultSet rs = pstmt2.executeQuery();
-				System.out.println(rs.getLong(1));
 				vo.setNo(rs.next() ? rs.getLong(1):null);
 				rs.close();
 				
 			} catch (SQLException e) {
-				System.out.println("error : "+e);
+				System.out.println("error : " + e);
 			}
 
 		

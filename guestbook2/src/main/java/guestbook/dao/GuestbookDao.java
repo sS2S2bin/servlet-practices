@@ -71,7 +71,7 @@ public class GuestbookDao {
 		
 		try(
 				Connection conn = getConnection(); 
-				PreparedStatement pstmt = conn.prepareStatement("select no,name,password,contents,reg_date from guestbook");  
+				PreparedStatement pstmt = conn.prepareStatement("select no,name,password,contents,reg_date from guestbook order by no desc");  
 					
 			
 			){

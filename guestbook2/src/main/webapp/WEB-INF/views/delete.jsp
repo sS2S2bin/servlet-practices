@@ -4,12 +4,7 @@
 <!DOCTYPE html>
 <%
 	request.setCharacterEncoding("utf-8");
-	String no = request.getParameter("no");
-	String password = request.getParameter("password");
-	
 
-	new GuestbookDao().deleteByNo(Long.parseLong(no),password);
-	response.sendRedirect("/guestbook1");
 %>
 
 <html>

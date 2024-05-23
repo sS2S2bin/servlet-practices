@@ -3,8 +3,7 @@
 <%@page import="java.util.List"%>
 <%@page import="guestbook.dao.GuestbookDao"%>
 <%
-	List<GuestbookVo> list = new GuestbookDao().findAll();
-	request.setCharacterEncoding("utf-8");
+List<GuestbookVo> list = (List<GuestbookVo>)request.getAttribute("list"); 
 %>
 <html>
 <head>
@@ -12,7 +11,8 @@
 <title>방명록</title>
 </head>
 <body>
-	<form action="add.jsp" method="post">
+	<form action="<%=request.getContextPath()%>/gb?" method="post">
+	<input type='hidden' name='a' value='add'>
 	<table border=1 width=500>
 		<tr>
 			<td>이름</td><td><input type="text" name="name"></td>
@@ -33,10 +33,10 @@
 	%>
 	<table width=510 border=1>
 		<tr>
-			<td>[<%=count-- %>]</td>
+			<td>[<%=count--%>]</td>
 			<td><%=vo.getName() %></td>
 			<td><%=vo.getRegDate() %></td>
-			<td><a href="./deleteform.jsp?no=<%=vo.getNo()%>">삭제</a></td>
+			<td><a href="<%=request.getContextPath()%>/gb?a=deleteform&no=<%=vo.getNo()%>">삭제</a></td>
 		</tr>
 		<tr>
 			<td colspan=4><%=vo.getContents() %></td>

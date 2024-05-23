@@ -10,7 +10,7 @@
 </head>
 <body>
 	<form method="post" action="delete.jsp">
-	<input type='hidden' name="no" value="<%=no%>">
+	<input type='text' name="no" value="<%=no%>">
 	<table>
 		<tr>
 			<td>비밀번호</td>

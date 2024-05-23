@@ -8,7 +8,7 @@
 	String password = request.getParameter("password");
 	
 
-	new GuestbookDao().deleteByNo(no,password);
+	new GuestbookDao().deleteByNo(Long.parseLong(no),password);
 	response.sendRedirect("/guestbook1");
 %>
 

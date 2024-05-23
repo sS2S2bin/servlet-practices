@@ -27,12 +27,12 @@ public class GuestbookDao {
 	
 
 
-	public void deleteByNo(String no, String pw) {
+	public void deleteByNo(Long no, String pw) {
 		try(
 			Connection conn = getConnection(); 
 			PreparedStatement pstmt = conn.prepareStatement("delete from guestbook where no=? and password=?");  
 		){
-			pstmt.setLong(1, Long.parseLong(no));
+			pstmt.setLong(1, no);
 			pstmt.setString(2, pw);
 			pstmt.executeUpdate();
 			
@@ -58,7 +58,7 @@ public class GuestbookDao {
 				
 				ResultSet rs = pstmt2.executeQuery();
 				System.out.println(rs.getLong(1));
-				vo.setNo(rs.next() ? String.valueOf(rs.getLong(1)):null);
+				vo.setNo(rs.next() ? rs.getLong(1):null);
 				rs.close();
 				
 			} catch (SQLException e) {
@@ -82,13 +82,14 @@ public class GuestbookDao {
 				
 				while(rs.next()) {
 					GuestbookVo vo = new GuestbookVo();
+					
 					Long no = rs.getLong(1);
 					String name = rs.getString(2);
 					String pw = rs.getString(3);
 					String contents = rs.getString(4);
 					String regDate = rs.getString(5);
 					
-					vo.setNo(String.valueOf(no));
+					vo.setNo(no);
 					vo.setName(name);
 					vo.setPassword(contents);
 					vo.setContents(contents);

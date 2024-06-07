@@ -26,21 +26,75 @@ public class GuestbookDao {
 	}
 	
 
+	public int deleteByNo(Long no, String password) {
+	    int result = 0;
+	    Connection conn = null;
+	    PreparedStatement pstmt1 = null;
+	    PreparedStatement pstmt2 = null;
 
-	public void deleteByNo(Long no, String pw) {
-		try(
-			Connection conn = getConnection(); 
-			PreparedStatement pstmt = conn.prepareStatement("delete from guestbook where no=? and password=?");  
-		){
-			pstmt.setLong(1, no);
-			pstmt.setString(2, pw);
-			pstmt.executeUpdate();
-			
-		} catch (SQLException e) {
-			System.out.println("error : "+e);
-		}
-		
-	}
+	    try {
+	      conn = getConnection();
+
+	      // String date =
+	      // conn.prepareStatement("select date_format('%yyyy-%MM-%dd', reg_date) from guestbook where
+	      // no = ?");
+
+	      // 1. Parameter Binding
+	      pstmt1 = conn.prepareStatement(
+	          "update guestbook_log set count = count - 1 where date = (select date(reg_date) from guestbook where no = ?)");
+	      pstmt1.setLong(1, no);
+
+	      // 2. Parameter Binding
+	      pstmt2 = conn.prepareStatement("delete from guestbook where no = ? and password = ?");
+	      pstmt2.setLong(1, no);
+	      pstmt2.setString(2, password);
+
+	      // TX:BEGIN // - 오직 statement들 실행만
+	      conn.setAutoCommit(false);
+
+	      // DML2 실행
+	      result = pstmt2.executeUpdate();
+
+	      // DML1 실행
+	      // 비밀번호를 잘못 입력했을 경우도 생각
+	      if (result == 1) {
+	        pstmt1.executeUpdate();
+	      }
+
+	      // TX: END(SUCCESS) //
+	      conn.commit();
+
+	    } catch (SQLException e) {
+	      System.out.println("Error:" + e);
+	      // TX: END(FAIL) //
+	      // rollback이 비즈니스쪽에 있으면 안됨.
+	      // 예외를 논리로 쓰면 안됨.
+	      // 이 자리에 있어야한다.
+	      try {
+	        if (conn != null) {
+	          conn.rollback();
+	        }
+	      } catch (SQLException ignored) {
+
+	      }
+	    } finally {
+	      try {
+	        if (pstmt1 != null) {
+	          pstmt1.close();
+	        }
+	        if (pstmt2 != null) {
+	          pstmt2.close();
+	        }
+	        if (conn != null) {
+	          conn.close();
+	        }
+	      } catch (SQLException e) {
+	        System.out.println("error: " + e);
+	      }
+	    }
+
+	    return result;
+	  }
 
 	public int insert(GuestbookVo vo) {
 		int result = 0;

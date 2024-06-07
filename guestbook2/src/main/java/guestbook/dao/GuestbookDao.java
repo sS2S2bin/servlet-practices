@@ -86,9 +86,13 @@ public class GuestbookDao {
 			} catch (SQLException e) {				
 				System.out.println("error : " + e);
 				//TX:END(FAIL)//
-			}finally {
 				try {
 					conn.rollback();
+				} catch (SQLException ignored) {
+
+				}
+			}finally {
+				try {
 					
 					if(pstmt1!=null) {
 					pstmt1.close();}

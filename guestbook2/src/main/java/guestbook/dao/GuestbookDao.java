@@ -42,27 +42,70 @@ public class GuestbookDao {
 		
 	}
 
-	public void insert(GuestbookVo vo) {
-		try(
-				Connection conn = getConnection(); 
-				PreparedStatement pstmt1 = conn.prepareStatement("insert into guestbook(name, password,contents,reg_date) values(?,?,?,now())");  
-				PreparedStatement pstmt2 = conn.prepareStatement("select last_insert_id() from guestbook");  
-					
-			){
-				pstmt1.setString(1, vo.getName());
-				pstmt1.setString(2, vo.getPassword());
-				pstmt1.setString(3, vo.getContents());
-				pstmt1.executeUpdate();
-				
-				
-				ResultSet rs = pstmt2.executeQuery();
-				vo.setNo(rs.next() ? rs.getLong(1):null);
-				rs.close();
-				
-			} catch (SQLException e) {
-				System.out.println("error : " + e);
-			}
+	public int insert(GuestbookVo vo) {
+		int result = 0;
+		Connection conn = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
+		PreparedStatement pstmt3 = null;
+		ResultSet rs = null;
+		try{
+			conn = getConnection(); 
+			
+			
+			
+			
+			// guestbook_log update
+			pstmt1 = conn.prepareStatement("update guestbook_log set count = count + 1 where date = current_date()");
+			pstmt2 = conn.prepareStatement("insert into guestbook_log values(current_date(),1)");
 
+			// TX:BEGIN // 
+			conn.setAutoCommit(false);
+			pstmt3 = conn.prepareStatement("insert into guestbook(name, password,contents,reg_date) values(?,?,?,now())");  
+				
+			pstmt3.setString(1, vo.getName());
+			pstmt3.setString(2, vo.getPassword());
+			pstmt3.setString(3, vo.getContents());
+			//DML1
+			int rowCount = pstmt1.executeUpdate();
+			
+			//DML2
+			if(rowCount == 0) {
+				pstmt2.executeUpdate();
+			}
+			
+			//DML3
+			result = pstmt3.executeUpdate();
+			
+			
+			//TX:END(Succeess)//
+			conn.commit();
+			
+		
+				
+			} catch (SQLException e) {				
+				System.out.println("error : " + e);
+				//TX:END(FAIL)//
+			}finally {
+				try {
+					conn.rollback();
+					
+					if(pstmt1!=null) {
+					pstmt1.close();}
+					if(pstmt2!=null) {
+						pstmt2.close();}
+					if(pstmt3!=null) {
+						pstmt3.close();}
+					if(conn!=null) {
+					conn.close();}
+					if(rs!=null) {
+						rs.close();
+					}
+				}catch(SQLException ignored){
+					
+				}
+			}
+		return result;
 		
 	}
 	
